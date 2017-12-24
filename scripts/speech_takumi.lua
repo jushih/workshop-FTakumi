@@ -98,7 +98,7 @@ return {
 	ANNOUNCE_HUNGRY = "I could use some miso soup.",
 	ANNOUNCE_HUNT_BEAST_NEARBY = "I'm on the right trail.",
 	ANNOUNCE_HUNT_LOST_TRAIL = "Dang I lost it!",
-	ANNOUNCE_HUNT_LOST_TRAIL_SPRING = "Yeah. It's too wet to hold a footprint.",
+	ANNOUNCE_HUNT_LOST_TRAIL_SPRING = "It's too wet to hold a footprint.",
 	ANNOUNCE_INV_FULL = "I can't carry anything else!",
 	ANNOUNCE_KNOCKEDOUT = "Ugh, my head!",
 	ANNOUNCE_LOWRESEARCH = "That was a waste of time.",
@@ -123,7 +123,7 @@ return {
 	ANNOUNCE_THORNS = "Ow!",
 	ANNOUNCE_BURNT = "Yikes! That was hot!",
 	ANNOUNCE_TORCH_OUT = "My light!",
-	ANNOUNCE_FAN_OUT = "My fan is gone with the wind.",
+	ANNOUNCE_FAN_OUT = "The fan's stopped.",
     ANNOUNCE_COMPASS_OUT = "This compass doesn't point anymore.",
 	ANNOUNCE_TRAP_WENT_OFF = "My bad.",
 	ANNOUNCE_UNIMPLEMENTED = "OW! I don't think it's ready yet.",
@@ -177,7 +177,7 @@ return {
             GENERIC = "It's %s!",
             ATTACKER = "That %s looks shifty...",
             MURDERER = "Traitor! You'll pay for your betrayal!!",
-            REVIVER = "Thanks... but I didn't need help.",
+            REVIVER = "Thanks... but I didn't ask for your help.",
             GHOST = "%s could use a heart.",
         },
 		WILSON = 
@@ -185,7 +185,7 @@ return {
 			GENERIC = "It's Wilson!",
 			ATTACKER = "That Wilson looks shifty...",
 			MURDERER = "Traitor! You'll pay for your betrayal!!",
-			REVIVER = "Thanks... but I didn't need help.",
+			REVIVER = "Thanks... but I didn't ask for your help.",
 			GHOST = "Wilson could use a heart.",
 		},
 		WOLFGANG = 
@@ -193,7 +193,7 @@ return {
 			GENERIC = "It's Wolfgang!",
 			ATTACKER = "That Wolfgang looks shifty...",
 			MURDERER = "Traitor! You'll pay for your betrayal!!",
-			REVIVER = "Thanks... but I didn't need help.",
+			REVIVER = "Thanks... but I didn't ask for your help.",
 			GHOST = "Wolfgang could use a heart.",
 		},
 		WAXWELL = 
@@ -201,7 +201,7 @@ return {
 			GENERIC = "It's Maxwell!",
 			ATTACKER = "That Maxwell looks shifty...",
 			MURDERER = "Traitor! You'll pay for your betrayal!!",
-			REVIVER = "Thanks... but I didn't need help.",
+			REVIVER = "Thanks... but I didn't ask for your help.",
 			GHOST = "Maxwell could use a heart.",
 		},
 		WX78 = 
@@ -209,7 +209,7 @@ return {
 			GENERIC = "It's WX-78!",
 			ATTACKER = "That WX-78 looks shifty...",
 			MURDERER = "Traitor! You'll pay for your betrayal!!",
-			REVIVER = "Thanks... but I didn't need help.",
+			REVIVER = "Thanks... but I didn't ask for your help.",
 			GHOST = "WX-78 could use a heart.",
 		},
 		WILLOW = 
@@ -217,7 +217,7 @@ return {
 			GENERIC = "It's Willow!",
 			ATTACKER = "That Willow looks shifty...",
 			MURDERER = "Traitor! You'll pay for your betrayal!!",
-			REVIVER = "Thanks... but I didn't need help.",
+			REVIVER = "Thanks... but I didn't ask for your help.",
 			GHOST = "Willow could use a heart.",
 		},
 		WENDY = 
@@ -225,7 +225,7 @@ return {
 			GENERIC = "It's Wendy!",
 			ATTACKER = "That Wendy looks shifty...",
 			MURDERER = "Traitor! You'll pay for your betrayal!!",
-			REVIVER = "Thanks... but I didn't need help.",
+			REVIVER = "Thanks... but I didn't ask for your help.",
 			GHOST = "Wendy could use a heart.",
 		},
 		WOODIE = 
@@ -233,7 +233,7 @@ return {
 			GENERIC = "It's Woodie!",
 			ATTACKER = "That Woodie looks shifty...",
 			MURDERER = "Traitor! You'll pay for your betrayal!!",
-			REVIVER = "Thanks... but I didn't need help.",
+			REVIVER = "Thanks... but I didn't ask for your help.",
 			GHOST = "Woodie could use a heart.",
 		},
 		WICKERBOTTOM = 
@@ -241,7 +241,7 @@ return {
 			GENERIC = "It's Wickerbottom!",
 			ATTACKER = "That Wickerbottom looks shifty...",
 			MURDERER = "Traitor! You'll pay for your betrayal!!",
-			REVIVER = "Thanks... but I didn't need help.",
+			REVIVER = "Thanks... but I didn't ask for your help.",
 			GHOST = "Wickerbottom could use a heart.",
 		},
 		WES = 
@@ -249,7 +249,7 @@ return {
 			GENERIC = "It's Wes!",
 			ATTACKER = "That Wes looks shifty...",
 			MURDERER = "Traitor! You'll pay for your betrayal!!",
-			REVIVER = "Thanks... but I didn't need help.",
+			REVIVER = "Thanks... but I didn't ask for your help.",
 			GHOST = "Wes could use a heart.",
 		},
 		MULTIPLAYER_PORTAL = "It's falling apart, will it hold up?",
@@ -364,8 +364,8 @@ return {
 
 		CAVE_BANANA = "It's mushy.",
 		CAVE_BANANA_COOKED = "Yum!",
-		CAVE_BANANA_TREE = "It's dubiously photosynthetical.",
-		ROCKY = "It has terrifying claws.",
+		CAVE_BANANA_TREE = "How does it grow down here?",
+		ROCKY = "It's claws are sharp.",
 		
 		COMPASS =
 		{
@@ -513,7 +513,7 @@ return {
 		BEARGERVEST = "The hunt's on!",
 		ICEPACK = "The fur keeps the temperature inside stable.",
 		BEARGER_FUR = "A mat of thick fur.",
-		BEDROLL_STRAW = "It smells like wet.",
+		BEDROLL_STRAW = "It smells.",
 		BEE =
 		{
 			GENERIC = "Bees.",
@@ -849,7 +849,7 @@ return {
 			WITHERED = "It's not going to grow back while it's so hot.",
 			BURNING = "That's burning fast!",
 			GENERIC = "It's a tuft of grass.",
-			PICKED = "It was cut down in the prime of its life.",
+			PICKED = "Nothing's left to harvest.",
 		},
 		GREEN_CAP = "It seems pretty normal.",
 		GREEN_CAP_COOKED = "It's different now...",

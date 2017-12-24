@@ -1,12 +1,12 @@
 PrefabFiles = {
 	"takumi",
 	"takumi_none",
-        "yumi",
-        "windarrow",
-        "fujinlight",   
-		"takumi_dirtpile",
-		"takumi_track",
-		"takumitrap",
+    "yumi",
+    "windarrow",
+    "fujinlight",   
+	"takumi_dirtpile",
+	"takumi_track",
+	"takumitrap",
 }
 
 Assets = {
@@ -41,8 +41,8 @@ Assets = {
     Asset( "ATLAS", "bigportraits/takumi_none.xml" ),
 
 	
-	Asset( "IMAGE", "images/yinyangtab.tex" ),
-    Asset( "ATLAS", "images/yinyangtab.xml" ),
+	Asset( "IMAGE", "images/takumitab.tex" ),
+    Asset( "ATLAS", "images/takumitab.xml" ),
 	
 	Asset( "IMAGE", "images/inventoryimages/takumitrap.tex" ),
 	Asset("ATLAS", "images/inventoryimages/takumitrap.xml"),
@@ -61,7 +61,10 @@ STRINGS.NAMES.TAKUMI_TRACK = "Track"
 STRINGS.NAMES.TAKUMITRAP = "Takumi's Trap"
 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.YUMI = "A bow without a bowstring."
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.TAKUMITRAP = "A sturdy, well-made trap."
 --STRINGS.CHARACTERS.TAKUMI.DESCRIBE.YUMI = "The Fujin Yumi. The bow chose me as its wielder."
+STRINGS.RECIPE_DESC.TAKUMITRAP = "A sturdier trap made by a hunter." 
+
 
 -- The character select screen lines
 STRINGS.CHARACTER_TITLES.takumi = "The Wildcard"
@@ -84,8 +87,8 @@ AddModCharacter("takumi", "MALE")
 function WorldPrefabPostInit(inst)
 		inst:AddComponent("takumihunter")
 end
---add item and recipie tabl
-RECIPETABS.TAKUMI = {str = "TAKUMI", sort = 19, icon = "yinyangtab.tex", icon_atlas = "images/yinyangtab.xml"}
+--add item and recipie tab
+RECIPETABS.TAKUMI = {str = "TAKUMI", sort = 19, icon = "takumitab.tex", icon_atlas = "images/takumitab.xml"}
 --Recipe("takumitrap", {Ingredient("twigs", 2),Ingredient("cutgrass", 6)}, RECIPETABS.TAKUMI, TECH.NONE)
 
 local takumi_trap = AddRecipe("takumitrap", {Ingredient("twigs", 2),Ingredient("cutgrass", 6)}, RECIPETABS.TAKUMI, TECH.NONE, nil, nil, nil, nil, "takumi" )
