@@ -51,7 +51,6 @@ Assets = {
 	Asset( "IMAGE", "images/inventoryimages/takumitrap.tex" ),
 	Asset("ATLAS", "images/inventoryimages/takumitrap.xml"),
 	
-	
 	Asset( "IMAGE", "images/inventoryimages/takumi_seal.tex" ),
 	Asset("ATLAS", "images/inventoryimages/takumi_seal.xml"),
 }
@@ -91,7 +90,7 @@ STRINGS.RECIPE_DESC.TAKUMI_SEAL = "Used to promote at level 20."
 -- The character select screen lines
 STRINGS.CHARACTER_TITLES.takumi = "The Wildcard"
 STRINGS.CHARACTER_NAMES.takumi = "Takumi"
-STRINGS.CHARACTER_DESCRIPTIONS.takumi = "*Wielder of the Divine Bow\n*Distrustful\n*Skilled at hunting"
+STRINGS.CHARACTER_DESCRIPTIONS.takumi = "*Wielder of the Divine Bow\n*Distrustful"
 STRINGS.CHARACTER_QUOTES.takumi = "\"You can count on me...no matter what some may say.\""
 
 -- Custom speech strings
@@ -122,19 +121,14 @@ end
 
 --Adding reciepe tab and item
 RECIPETABS.TAKUMI = {str = "TAKUMI", sort = 19, icon = "takumitab.tex", icon_atlas = "images/takumitab.xml"}
+--Recipe("takumitrap", {Ingredient("twigs", 2),Ingredient("cutgrass", 6)}, RECIPETABS.TAKUMI, TECH.NONE)
 
 local takumi_trap = AddRecipe("takumitrap", {Ingredient("twigs", 2),Ingredient("cutgrass", 6)}, RECIPETABS.TAKUMI, TECH.NONE, nil, nil, nil, nil, "takumi" )
 takumi_trap.atlas = "images/inventoryimages/takumitrap.xml"
 
-
-<<<<<<< HEAD
 local takumi_seal = AddRecipe("takumi_seal", {Ingredient("goldnugget", 20),Ingredient("gears", 1),Ingredient("redgem", 1)}, RECIPETABS.TAKUMI, TECH.NONE, nil, nil, nil, nil, "takumi" )
 takumi_seal.atlas = "images/inventoryimages/takumi_seal.xml"
 
-
-if GLOBAL.TheNet:GetIsServer() then
-	AddPrefabPostInit("world", WorldPrefabPostInit)
-=======
 
 --Tuning
 TUNING.TAKUMI = {}
@@ -191,7 +185,6 @@ elseif(mode == "fe_max") then
 	TUNING.TAKUMI_RUNSPEED = 12
 	TUNING.TAKUMI_DAMAGE_MULTIPLIER = 1.2
 	TUNING.TAKUMI_DAMAGE_ABSORBTION = 0.2
->>>>>>> a366c0ac22b325c4fc0de412e59fc9f869477510
 end
 
 
@@ -271,8 +264,3 @@ local function STATS(inst)
 	
 end
 AddModRPCHandler("takumi", "STATS", STATS)
-
-
-
-
-
