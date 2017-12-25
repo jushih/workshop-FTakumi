@@ -7,6 +7,7 @@ PrefabFiles = {
 	"takumi_dirtpile",
 	"takumi_track",
 	"takumitrap",
+	"takumi_seal"
 }
 
 Assets = {
@@ -46,6 +47,10 @@ Assets = {
 	
 	Asset( "IMAGE", "images/inventoryimages/takumitrap.tex" ),
 	Asset("ATLAS", "images/inventoryimages/takumitrap.xml"),
+	
+	
+	Asset( "IMAGE", "images/inventoryimages/takumi_seal.tex" ),
+	Asset("ATLAS", "images/inventoryimages/takumi_seal.xml"),
 }
 
 local require = GLOBAL.require
@@ -59,12 +64,13 @@ STRINGS.NAMES.YUMI = "Fujin Yumi"
 STRINGS.NAMES.TAKUMI_DIRTPILE = "Suspicious Dirt Pile"
 STRINGS.NAMES.TAKUMI_TRACK = "Track"
 STRINGS.NAMES.TAKUMITRAP = "Takumi's Trap"
+STRINGS.NAMES.TAKUMI_SEAL = "Master Seal."
 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.YUMI = "A bow without a bowstring."
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.TAKUMITRAP = "A sturdy, well-made trap."
 --STRINGS.CHARACTERS.TAKUMI.DESCRIBE.YUMI = "The Fujin Yumi. The bow chose me as its wielder."
 STRINGS.RECIPE_DESC.TAKUMITRAP = "A sturdier trap made by a hunter." 
-
+STRINGS.RECIPE_DESC.TAKUMI_SEAL = "Used to promote at level 20."
 
 -- The character select screen lines
 STRINGS.CHARACTER_TITLES.takumi = "The Wildcard"
@@ -89,10 +95,13 @@ function WorldPrefabPostInit(inst)
 end
 --add item and recipie tab
 RECIPETABS.TAKUMI = {str = "TAKUMI", sort = 19, icon = "takumitab.tex", icon_atlas = "images/takumitab.xml"}
---Recipe("takumitrap", {Ingredient("twigs", 2),Ingredient("cutgrass", 6)}, RECIPETABS.TAKUMI, TECH.NONE)
 
 local takumi_trap = AddRecipe("takumitrap", {Ingredient("twigs", 2),Ingredient("cutgrass", 6)}, RECIPETABS.TAKUMI, TECH.NONE, nil, nil, nil, nil, "takumi" )
 takumi_trap.atlas = "images/inventoryimages/takumitrap.xml"
+
+
+local takumi_seal = AddRecipe("takumi_seal", {Ingredient("goldnugget", 20),Ingredient("gears", 1),Ingredient("redgem", 1)}, RECIPETABS.TAKUMI, TECH.NONE, nil, nil, nil, nil, "takumi" )
+takumi_seal.atlas = "images/inventoryimages/takumi_seal.xml"
 
 
 if GLOBAL.TheNet:GetIsServer() then
