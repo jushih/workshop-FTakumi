@@ -43,16 +43,15 @@ Assets = {
 	
     Asset( "IMAGE", "bigportraits/takumi_none.tex" ),
     Asset( "ATLAS", "bigportraits/takumi_none.xml" ),
-
 	
 	Asset( "IMAGE", "images/takumitab.tex" ),
     Asset( "ATLAS", "images/takumitab.xml" ),
 	
 	Asset( "IMAGE", "images/inventoryimages/takumitrap.tex" ),
-	Asset("ATLAS", "images/inventoryimages/takumitrap.xml"),
+	Asset( "ATLAS", "images/inventoryimages/takumitrap.xml"),
 	
 	Asset( "IMAGE", "images/inventoryimages/takumi_seal.tex" ),
-	Asset("ATLAS", "images/inventoryimages/takumi_seal.xml"),
+	Asset( "ATLAS", "images/inventoryimages/takumi_seal.xml"),
 }
 -- Active key
 -- Import the lib use.
@@ -79,7 +78,7 @@ STRINGS.NAMES.YUMI = "Fujin Yumi"
 STRINGS.NAMES.TAKUMI_DIRTPILE = "Suspicious Dirt Pile"
 STRINGS.NAMES.TAKUMI_TRACK = "Track"
 STRINGS.NAMES.TAKUMITRAP = "Takumi's Trap"
-STRINGS.NAMES.TAKUMI_SEAL = "Master Seal."
+STRINGS.NAMES.TAKUMI_SEAL = "Master Seal"
 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.YUMI = "A bow without a bowstring."
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.TAKUMITRAP = "A sturdy, well-made trap."
