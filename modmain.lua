@@ -68,6 +68,7 @@ local STRINGS = GLOBAL.STRINGS
 local RECIPETABS = GLOBAL.RECIPETABS
 local TECH = GLOBAL.TECH
 local Ingredient = GLOBAL.Ingredient
+local TUNING = GLOBAL.TUNING
 
 --item names
 STRINGS.NAMES.YUMI = "Fujin Yumi"
@@ -123,17 +124,64 @@ takumi_trap.atlas = "images/inventoryimages/takumitrap.xml"
 
 
 --Tuning
-GLOBAL.TUNING.TAKUMI = {}
-GLOBAL.TUNING.TAKUMI.KEY = GetModConfigData("takumi_stat_key") or 107 
-TUNING.TAKUMI_LEVEL_MAX = 20
-TUNING.TAKUMI_EXP_MAX = 100
-TUNING.LEVELUP = 1
+TUNING.TAKUMI = {}
+TUNING.TAKUMI.KEY = GetModConfigData("takumi_level_key") or 107 
+TUNING.TAKUMI.KEY2 = GetModConfigData("takumi_stats_key") or 114 
 
-TUNING.TAKUMI_HEALTH = 100
-TUNING.TAKUMI_HUNGER = 100
-TUNING.TAKUMI_SANITY = 75
+if(mode == "fe_fixed") then
+	
+	TUNING.TAKUMI_LEVEL_START = 1
+	TUNING.TAKUMI_LEVEL_TWENTY = 20
+	TUNING.TAKUMI_LEVEL_MAX = 40
+	TUNING.TAKUMI_EXP_MAX = 100
+	TUNING.LEVELUP = 1
+	TUNING.STAT_UP_TYPE = "Fixed"
 
---Info
+	TUNING.TAKUMI_HEALTH = 125
+	TUNING.TAKUMI_HUNGER = 100
+	TUNING.TAKUMI_SANITY = 75
+	TUNING.TAKUMI_WALKSPEED = 6
+	TUNING.TAKUMI_RUNSPEED = 8
+	TUNING.TAKUMI_DAMAGE_MULTIPLIER = 0.8
+	TUNING.TAKUMI_DAMAGE_ABSORBTION = 0
+
+elseif  mode == "fe_random" then
+	
+	TUNING.TAKUMI_LEVEL_START = 1
+	TUNING.TAKUMI_LEVEL_TWENTY = 20
+	TUNING.TAKUMI_LEVEL_MAX = 40
+	TUNING.TAKUMI_EXP_MAX = 100
+	TUNING.LEVELUP = 1
+	TUNING.STAT_UP_TYPE = "Random"
+
+	TUNING.TAKUMI_HEALTH = 125
+	TUNING.TAKUMI_HUNGER = 100
+	TUNING.TAKUMI_SANITY = 75
+	TUNING.TAKUMI_WALKSPEED = 6
+	TUNING.TAKUMI_RUNSPEED = 8
+	TUNING.TAKUMI_DAMAGE_MULTIPLIER = 0.8
+	TUNING.TAKUMI_DAMAGE_ABSORBTION = 0
+
+elseif(mode == "fe_max") then
+	TUNING.TAKUMI_LEVEL_START = 40
+	TUNING.TAKUMI_LEVEL_TWENTY = 20
+	TUNING.TAKUMI_LEVEL_MAX = 40
+	TUNING.TAKUMI_EXP_MAX = 100
+	TUNING.LEVELUP = 0
+	TUNING.STAT_UP_TYPE = "Fixed"
+	--master seal gives 15 health, 20 hunger, 25 sanity
+	
+	TUNING.TAKUMI_HEALTH = 300
+	TUNING.TAKUMI_HUNGER = 280
+	TUNING.TAKUMI_SANITY = 200
+	TUNING.TAKUMI_WALKSPEED = 10
+	TUNING.TAKUMI_RUNSPEED = 12
+	TUNING.TAKUMI_DAMAGE_MULTIPLIER = 1.2
+	TUNING.TAKUMI_DAMAGE_ABSORBTION = 0.2
+end
+
+
+--Exp info keypress
 local function INFO(inst)
 	inst.writing = false
 	local x,y,z = inst.Transform:GetWorldPosition()
@@ -148,10 +196,14 @@ local function INFO(inst)
 		inst.keep_check = false			
 		if not inst.keep_check then		
 			inst.keep_check = true	
-			if  mode  == "fe_on" then
-				inst.components.talker:Say("[Current Lvl ".." : "..(inst.Level).." / "..(TUNING.TAKUMI_LEVEL_MAX).." ]\n[ Current EXP".." : "..(inst.Exp).." / "..(TUNING.TAKUMI_EXP_MAX*inst.Level).." ]\n ")
-			elseif mode == "fe_off" then
-				inst.components.talker:Say("[Current Lvl ".." : "..(inst.Level).." / "..(TUNING.TAKUMI_LEVEL_MAX).." ]\n[ Current EXP".." : "..(inst.Exp).." / "..(TUNING.TAKUMI_EXP_MAX*inst.Level).." ]\n ")
+			if  mode  == "fe_fixed" or mode == "fe_random" then
+				if inst:HasTag("classup") then
+					inst.components.talker:Say("[Current Lvl ".." : "..(inst.Level).." / "..(TUNING.TAKUMI_LEVEL_MAX).." ]\n[ Current EXP".." : "..(inst.Exp).." / "..(TUNING.TAKUMI_EXP_MAX*inst.Level).." ]\n ")
+				else
+					inst.components.talker:Say("[Current Lvl ".." : "..(inst.Level).." / "..(TUNING.TAKUMI_LEVEL_TWENTY).." ]\n[ Current EXP".." : "..(inst.Exp).." / "..(TUNING.TAKUMI_EXP_MAX*inst.Level).." ]\n ")
+				end
+			elseif mode == "fe_max" then
+				inst.components.talker:Say("[Current Lvl ".." : "..(TUNING.TAKUMI_LEVEL_MAX).." / "..(TUNING.TAKUMI_LEVEL_MAX).." ]\n[ Current EXP".." : "..(0).." / "..(TUNING.TAKUMI_EXP_MAX*inst.Level).." ]\n ")
 			end
 			--inst.sg:AddStateTag("notalking")
 		elseif inst.keep_check then		
@@ -167,6 +219,44 @@ local function INFO(inst)
 	
 end
 AddModRPCHandler("takumi", "INFO", INFO)
+
+--Stat info
+local function STATS(inst)
+	inst.writing = false
+	local x,y,z = inst.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x,y,z, 1, {"_writeable"})
+	for k,v in pairs(ents) do
+		inst.writing = true
+	end 
+	
+	if not inst.writing then
+		local TheInput = TheInput
+		
+		inst.keep_check = false			
+		if not inst.keep_check then		
+			inst.keep_check = true	
+			if  mode  == "fe_fixed" then
+				inst.components.talker:Say("[Gained Hunger".." : "..(inst.maxhunger-TUNING.TAKUMI_HUNGER).."] \n[ Gained Sanity ".." : "..(inst.maxsanity-TUNING.TAKUMI_SANITY).."]\n [Gained Health".." : "..(inst.maxhealth-TUNING.TAKUMI_HEALTH).."] \n[ Current Speed  ".." : "..(inst.currentwalkspeed).."] \n[ Current Damage Multiplier ".." : "..(inst.damagemultiplier).."] \n[ Current Damage Absorbtion  ".." : "..(inst.damageabsorbtion).."]")
+			elseif mode == "fe_random" then
+				inst.components.talker:Say("[Gained Hunger".." : "..(inst.maxhunger-TUNING.TAKUMI_HUNGER).."] \n[ Gained Sanity ".." : "..(inst.maxsanity-TUNING.TAKUMI_SANITY).."]\n [Gained Health".." : "..(inst.maxhealth-TUNING.TAKUMI_HEALTH).."] \n[ Current Speed  ".." : "..(inst.currentwalkspeed).."] \n[ Current Damage Multiplier ".." : "..(inst.damagemultiplier).."] \n[ Current Damage Absorbtion  ".." : "..(inst.damageabsorbtion).."]")
+			elseif mode == "fe_max" then
+				inst.components.talker:Say("[Gained Hunger".." : "..(200).."] \n[ Gained Sanity ".." : "..(100).."]\n [Gained Health".." : "..(200).."] \n[ Gained Speed  ".." : "..(10).."] \n[ Current Damage Multiplier ".." : "..(1.2).."] \n[ Current Damage Absorbtion  ".." : "..(.2).."]")	
+			end
+			
+			--inst.sg:AddStateTag("notalking")
+		elseif inst.keep_check then		
+			inst.keep_check = false	
+		end
+		inst:DoTaskInTime( 0.5, function()
+			if inst.keep_check then
+				inst.keep_check = false
+			end 
+		end)
+		----inst.components.talker.colour = Vector3(0.7, 0.85, 1, 1)
+	end
+	
+end
+AddModRPCHandler("takumi", "STATS", STATS)
 
 
 
