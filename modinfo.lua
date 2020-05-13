@@ -1,5 +1,5 @@
 -- This information tells other players more about the mod
-name = "Takumi Test"
+name = "Takumi (Fallen)"
 description = "From Fire Emblem Fates. Second Prince of Hoshido and a skilled archer."
 author = "Julie"
 version = "1.2" -- This is the version of the template. Change it to your own number.
@@ -40,7 +40,7 @@ configuration_options = {
 			{description = "Random", data = "fe_random"},
 			{description = "Max", data = "fe_max"},
 		},
-		default = "fe_fixed",
+		default = "fe_random",
 	},
 	{
         name = "takumi_level_key",

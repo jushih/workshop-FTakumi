@@ -31,16 +31,26 @@ local function onequip(inst, owner)
 			inst.components.weapon:SetRange(8,12)
 			inst.components.weapon:SetDamage(40)
 			
+			
+			
+			
 			-- add light to the bow
 			if inst.fire == nil then
-				inst.fire = SpawnPrefab("fujinlight")
-				inst.fire.entity:AddFollower()
-				inst.fire.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -110, 0)
+			
+				if owner:HasTag("classup") then
+				
+					inst.fire = SpawnPrefab("fujinlight2")
+					inst.fire.entity:AddFollower()
+					inst.fire.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -110, 0)
+				else
+					inst.fire = SpawnPrefab("fujinlight")
+					inst.fire.entity:AddFollower()
+					inst.fire.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -110, 0)
+				end
 			end
 	
 		else --if owner isn't takumi
-			inst:RemoveComponent("equippable")
-			inst:RemoveComponent("weapon")
+			owner:DoTaskInTime(0.5, function()  owner.components.inventory:GiveItem(inst) end)
 			owner.components.talker:Say("A bow without a bowstring.")
 				
 		end
@@ -58,7 +68,11 @@ local function onunequip(inst, owner)
     end
 end
 
-
+local function onblink(staff, pos, caster)
+	if caster.components.sanity ~= nil then
+		caster.components.sanity:DoDelta(-1.6)
+	end
+end
 
 
 local function fn()
@@ -87,7 +101,7 @@ local function fn()
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
-
+	
 
 
     inst:AddComponent("weapon")
@@ -99,7 +113,10 @@ local function fn()
     -- added speed modifier upon equip
 	inst.components.equippable.walkspeedmult = 1.3
 
-
+	--add teleport
+	
+    --inst:AddComponent("blinkstaff")
+	--inst.components.blinkstaff.onblinkfn = onblink
 	
 	MakeHauntableLaunch(inst)
     

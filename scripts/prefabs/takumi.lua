@@ -4,6 +4,7 @@ local MakePlayerCharacter = require "prefabs/player_common"
 
 local assets = {
     Asset("SCRIPT", "scripts/prefabs/player_common.lua"),
+	Asset("ANIM","anim/takumi_classed.zip"),
 }
 local prefabs = 
 {
@@ -13,16 +14,15 @@ local prefabs =
 -- Custom starting items
 local start_inv =
 {
-	"yumi",
+	"skadi",
 }
 
 
 local function GetExp(inst)
 	if TUNING.LEVELUP == 0 then return end
 	
-	if inst.Level == 20 then
+	if inst.Level == 20 and inst:HasTag("classup") then
 		inst.maxlevel = TUNING.TAKUMI_LEVEL_MAX
-		inst:AddTag("classup")
 	elseif inst.Level > 20 then
 		inst.maxlevel = TUNING.TAKUMI_LEVEL_MAX
 	else
@@ -80,20 +80,30 @@ local function GetExp(inst)
 		inst.components.health:SetAbsorptionAmount(inst.damageabsorbtion)
 		
 		inst.components.talker:Say("[LEVEL UP!]")
-		
+		if inst.Level == 21 then
+			inst.components.talker:Say("[CLASS UP!]")
+		end		
 	elseif levelup == true and TUNING.STAT_UP_TYPE == "Random" then
 		local speed = 1/10
 		local damagemultiplier = 1/100
 		local damageabsorbtion = 1/1000
 	
 		for i = 1, lvlup, 1 do  
-			inst.maxhealth = inst.maxhealth +  math.random(0,8)
-			inst.maxhunger = inst.maxhunger + math.random(0,8)
-			inst.maxsanity = inst.maxsanity + math.random(0,5)
-			inst.currentwalkspeed = inst.currentwalkspeed + math.random(0,2)*speed
-			inst.currentrunspeed = inst.currentrunspeed + math.random(0,2)*speed
-			inst.damagemultiplier = inst.damagemultiplier+ math.random(0,2)*damagemultiplier
-			inst.damageabsorbtion = inst.damageabsorbtion + math.random(0,10)*damageabsorbtion
+			inst.increasehealth = math.random(0,8)
+			inst.increasehunger = math.random(0,8)
+			inst.increasesanity = math.random(0,5)
+			inst.increasespeed = math.random(0,2)*speed
+			inst.increasedamage = math.random(0,2)*damagemultiplier
+			inst.increasedamageabsorbtion= math.random(0,10)*damageabsorbtion
+			
+		
+			inst.maxhealth = inst.maxhealth +  inst.increasehealth
+			inst.maxhunger = inst.maxhunger + inst.increasehunger
+			inst.maxsanity = inst.maxsanity + inst.increasesanity
+			inst.currentwalkspeed = inst.currentwalkspeed + inst.increasespeed 
+			inst.currentrunspeed = inst.currentrunspeed + inst.increasespeed 
+			inst.damagemultiplier = inst.damagemultiplier + inst.increasedamage
+			inst.damageabsorbtion = inst.damageabsorbtion + inst.increasedamageabsorbtion
 			
 	
 		end
@@ -110,7 +120,31 @@ local function GetExp(inst)
 		inst.components.sanity:SetPercent(sanity_percent)
 		inst.components.combat.damagemultiplier = inst.damagemultiplier
 		inst.components.health:SetAbsorptionAmount(inst.damageabsorbtion)
-		inst.components.talker:Say("[LEVEL UP!]")
+		
+		
+		
+		inst.weightedstatchange = inst.increasehealth/4 + inst.increasehunger/4 + inst.increasesanity/2.5 + inst.increasespeed*10+ inst.increasedamage*100+  inst.increasedamageabsorbtion*200
+		print(inst.increasehealth/4)
+		print(inst.increasehunger/4 )		
+		print(inst.increasesanity/2.5)		
+		print(inst.increasespeed*10)		
+		print(inst.increasedamage*100)
+		print(inst.increasedamageabsorbtion*200)
+		print(inst.weightedstatchange)
+		
+		
+		if inst.weightedstatchange > 7 then
+			inst.components.talker:Say("Phew! Nice growth!")
+		elseif inst.weightedstatchange < 5 then
+			inst.components.talker:Say("What? It happens!")
+		else
+			inst.components.talker:Say("All right. Not bad.")
+		end
+		
+		if inst.Level == 21 then
+			inst.components.talker:Say("[CLASS UP!]")
+		end		
+		
 	end
 
 end
@@ -153,6 +187,25 @@ local function OnKill(inst, data)
 	end
 end
 
+local function classup (inst)
+	if inst.Level == 20 then
+		inst:AddTag("classup")
+		inst.components.sanity.night_drain_mult = 1
+		inst.components.sanity.neg_aura_mult = 1
+		inst.maxhealth = inst.maxhealth + 15
+		inst.maxhunger = inst.maxhunger + 20
+		inst.maxsanity = inst.maxsanity + 25
+		inst.Exp = 2000
+		GetExp(inst)
+		
+		
+		inst.AnimState:SetBuild("takumi_classed")
+		--local fx1 = SpawnPrefab("wathgrithr_spirit")
+		--fx1.Transform:SetPosition(inst.Transform:GetWorldPosition());fx1.Transform:SetScale(1,1,1)
+		SpawnPrefab("explode_small").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		
+	end
+end
 
 
 -- When the character is revived from human
@@ -170,6 +223,10 @@ end
 local function onload(inst)
     inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
     inst:ListenForEvent("ms_becameghost", onbecameghost)
+	
+	if inst:HasTag("classup") then 
+		inst.AnimState:SetBuild("takumi_classed")
+	end
 
     if inst:HasTag("playerghost") then
         onbecameghost(inst)
@@ -255,7 +312,7 @@ local common_postinit = function(inst)
         inst:AddTag("insomniac")
 		
 	inst:AddTag("takumi")
-	
+	inst:AddTag("canclassup")
 	 
 	inst.MiniMapEntity:SetIcon( "takumi.tex" )
 	
@@ -272,6 +329,7 @@ local common_postinit = function(inst)
 	if TUNING.LEVELUP == 0 then
 		inst:AddTag("classup")
 	end
+	
 	--stat info
 	inst:AddComponent("keyhandler")
 	inst.components.keyhandler:AddActionListener("takumi", TUNING.TAKUMI.KEY, "INFO")
@@ -321,7 +379,7 @@ local master_postinit = function(inst)
 	inst.damagemultiplier = TUNING.TAKUMI_DAMAGE_MULTIPLIER + 0.01
 	inst.damageabsorbtion = TUNING.TAKUMI_DAMAGE_ABSORBTION + 0.005
 	inst:ListenForEvent("killed", OnKill)
-	
+	inst:ListenForEvent("fireemblemclassup", classup)
 	
 	
 	inst.OnLoad = onload

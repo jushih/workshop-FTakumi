@@ -7,10 +7,15 @@ PrefabFiles = {
     "yumi",
     "windarrow",
     "fujinlight",   
+    "fujinlight2",   
 	"takumi_dirtpile",
 	"takumi_track",
 	"takumitrap",
-	"takumi_seal"
+	"takumi_seal",
+	"takumi_clone",
+	"skadi_clone",
+	"skadi",
+	"skadiarrow"
 }
 
 Assets = {
@@ -73,18 +78,25 @@ local TECH = GLOBAL.TECH
 local Ingredient = GLOBAL.Ingredient
 local TUNING = GLOBAL.TUNING
 
+local SITCOMMAND = GLOBAL.Action(4, true, true, 10,	false, false, nil)
+local SITCOMMAND_CANCEL = GLOBAL.Action(4, true, true, 10, false, false, nil)
+
 --item names
 STRINGS.NAMES.YUMI = "Fujin Yumi"
 STRINGS.NAMES.TAKUMI_DIRTPILE = "Suspicious Dirt Pile"
 STRINGS.NAMES.TAKUMI_TRACK = "Track"
 STRINGS.NAMES.TAKUMITRAP = "Takumi's Trap"
 STRINGS.NAMES.TAKUMI_SEAL = "Master Seal"
+STRINGS.NAMES.SKADI = "Skadi"
+
 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.YUMI = "A bow without a bowstring."
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.TAKUMITRAP = "A sturdy, well-made trap."
 --STRINGS.CHARACTERS.TAKUMI.DESCRIBE.YUMI = "The Fujin Yumi. The bow chose me as its wielder."
 STRINGS.RECIPE_DESC.TAKUMITRAP = "A sturdier trap made by a hunter." 
 STRINGS.RECIPE_DESC.TAKUMI_SEAL = "Used to promote at level 20."
+STRINGS.NAMES.TAKUMI_CLONE = "Takumi's Clone"
+STRINGS.NAMES.SKADI_CLONE = "Skadi"
 
 -- The character select screen lines
 STRINGS.CHARACTER_TITLES.takumi = "The Wildcard"
@@ -105,8 +117,46 @@ AddModCharacter("takumi", "MALE")
 
 
 
+--
+AddReplicableComponent("followersitcommand")
 
+SITCOMMAND.id = "SITCOMMAND"
+SITCOMMAND.str = "Order to Stay"
+SITCOMMAND.fn = function(act)
+	local targ = act.target
+	if targ and targ.components.followersitcommand then
+		act.doer.components.locomotor:Stop()
+		act.doer.components.talker:Say("On guard!")
+		targ.components.followersitcommand:SetStaying(true)
+		targ.components.followersitcommand:RememberSitPos("currentstaylocation", GLOBAL.Point(targ.Transform:GetWorldPosition())) 
+		return true
+	end
+end
+AddAction(SITCOMMAND)
 
+SITCOMMAND_CANCEL.id = "SITCOMMAND_CANCEL"
+SITCOMMAND_CANCEL.str = "Order to Follow"
+SITCOMMAND_CANCEL.fn = function(act)
+	local targ = act.target
+	if targ and targ.components.followersitcommand then
+		act.doer.components.locomotor:Stop()
+		act.doer.components.talker:Say("By my side!")
+		targ.components.followersitcommand:SetStaying(false)
+		return true
+	end
+end
+AddAction(SITCOMMAND_CANCEL)
+
+AddComponentAction("SCENE", "followersitcommand", function(inst, doer, actions, rightclick)
+	if rightclick and inst.replica.followersitcommand then
+		if not inst.replica.followersitcommand:IsCurrentlyStaying() then
+			table.insert(actions, GLOBAL.ACTIONS.SITCOMMAND)
+		else
+			table.insert(actions, GLOBAL.ACTIONS.SITCOMMAND_CANCEL)
+		end
+	end
+end)
+--
 
 
 --Hunter Skill
@@ -125,8 +175,15 @@ RECIPETABS.TAKUMI = {str = "TAKUMI", sort = 19, icon = "takumitab.tex", icon_atl
 local takumi_trap = AddRecipe("takumitrap", {Ingredient("twigs", 2),Ingredient("cutgrass", 6)}, RECIPETABS.TAKUMI, TECH.NONE, nil, nil, nil, nil, "takumi" )
 takumi_trap.atlas = "images/inventoryimages/takumitrap.xml"
 
-local takumi_seal = AddRecipe("takumi_seal", {Ingredient("goldnugget", 20),Ingredient("gears", 1),Ingredient("redgem", 1)}, RECIPETABS.TAKUMI, TECH.NONE, nil, nil, nil, nil, "takumi" )
-takumi_seal.atlas = "images/inventoryimages/takumi_seal.xml"
+--local takumi_seal = AddRecipe("takumi_seal", {Ingredient("goldnugget", 20),Ingredient("gears", 1),Ingredient("redgem", 1)}, RECIPETABS.TAKUMI, TECH.NONE, nil, nil, nil, nil, "takumi" )
+--takumi_seal.atlas = "images/inventoryimages/takumi_seal.xml"
+
+AddRecipe("takumi_clone",
+{GLOBAL.Ingredient(GLOBAL.CHARACTER_INGREDIENT.SANITY, 30), GLOBAL.Ingredient(GLOBAL.CHARACTER_INGREDIENT.HEALTH, 30)},
+RECIPETABS.TAKUMI, TECH.NONE,
+nil, nil, nil, nil, "takumi",
+"images/takumitab.xml", "takumitab.tex")
+
 
 
 --Tuning
@@ -134,7 +191,7 @@ TUNING.TAKUMI = {}
 TUNING.TAKUMI.KEY = GetModConfigData("takumi_level_key") or 107 
 TUNING.TAKUMI.KEY2 = GetModConfigData("takumi_stats_key") or 114 
 
-if(mode == "fe_fixed") then
+if  mode == "fe_fixed" then
 	
 	TUNING.TAKUMI_LEVEL_START = 1
 	TUNING.TAKUMI_LEVEL_TWENTY = 20
@@ -146,12 +203,12 @@ if(mode == "fe_fixed") then
 	TUNING.TAKUMI_HEALTH = 125
 	TUNING.TAKUMI_HUNGER = 100
 	TUNING.TAKUMI_SANITY = 75
-	TUNING.TAKUMI_WALKSPEED = 6
-	TUNING.TAKUMI_RUNSPEED = 8
+	TUNING.TAKUMI_WALKSPEED = 4
+	TUNING.TAKUMI_RUNSPEED = 6
 	TUNING.TAKUMI_DAMAGE_MULTIPLIER = 0.8
 	TUNING.TAKUMI_DAMAGE_ABSORBTION = 0
 
-elseif  mode == "fe_random" then
+elseif mode == "fe_random" then
 	
 	TUNING.TAKUMI_LEVEL_START = 1
 	TUNING.TAKUMI_LEVEL_TWENTY = 20
@@ -163,12 +220,12 @@ elseif  mode == "fe_random" then
 	TUNING.TAKUMI_HEALTH = 125
 	TUNING.TAKUMI_HUNGER = 100
 	TUNING.TAKUMI_SANITY = 75
-	TUNING.TAKUMI_WALKSPEED = 6
-	TUNING.TAKUMI_RUNSPEED = 8
+	TUNING.TAKUMI_WALKSPEED = 4
+	TUNING.TAKUMI_RUNSPEED = 6
 	TUNING.TAKUMI_DAMAGE_MULTIPLIER = 0.8
 	TUNING.TAKUMI_DAMAGE_ABSORBTION = 0
 
-elseif(mode == "fe_max") then
+elseif mode == "fe_max" then
 	TUNING.TAKUMI_LEVEL_START = 40
 	TUNING.TAKUMI_LEVEL_TWENTY = 20
 	TUNING.TAKUMI_LEVEL_MAX = 40
@@ -180,8 +237,8 @@ elseif(mode == "fe_max") then
 	TUNING.TAKUMI_HEALTH = 300
 	TUNING.TAKUMI_HUNGER = 280
 	TUNING.TAKUMI_SANITY = 200
-	TUNING.TAKUMI_WALKSPEED = 10
-	TUNING.TAKUMI_RUNSPEED = 12
+	TUNING.TAKUMI_WALKSPEED = 8
+	TUNING.TAKUMI_RUNSPEED = 10
 	TUNING.TAKUMI_DAMAGE_MULTIPLIER = 1.2
 	TUNING.TAKUMI_DAMAGE_ABSORBTION = 0.2
 end
@@ -246,7 +303,7 @@ local function STATS(inst)
 			elseif mode == "fe_random" then
 				inst.components.talker:Say("[Gained Hunger".." : "..(inst.maxhunger-TUNING.TAKUMI_HUNGER).."] \n[ Gained Sanity ".." : "..(inst.maxsanity-TUNING.TAKUMI_SANITY).."]\n [Gained Health".." : "..(inst.maxhealth-TUNING.TAKUMI_HEALTH).."] \n[ Current Speed  ".." : "..(inst.currentwalkspeed).."] \n[ Current Damage Multiplier ".." : "..(inst.damagemultiplier).."] \n[ Current Damage Absorbtion  ".." : "..(inst.damageabsorbtion).."]")
 			elseif mode == "fe_max" then
-				inst.components.talker:Say("[Gained Hunger".." : "..(200).."] \n[ Gained Sanity ".." : "..(100).."]\n [Gained Health".." : "..(200).."] \n[ Gained Speed  ".." : "..(10).."] \n[ Current Damage Multiplier ".." : "..(1.2).."] \n[ Current Damage Absorbtion  ".." : "..(.2).."]")	
+				inst.components.talker:Say("[Gained Hunger".." : "..(180).."] \n[ Gained Sanity ".." : "..(125).."]\n [Gained Health".." : "..(200).."] \n[ Current Speed  ".." : "..(8).."] \n[ Current Damage Multiplier ".." : "..(1.2).."] \n[ Current Damage Absorbtion  ".." : "..(.2).."]")	
 			end
 			
 			--inst.sg:AddStateTag("notalking")

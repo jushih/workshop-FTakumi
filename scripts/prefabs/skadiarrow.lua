@@ -1,25 +1,24 @@
 local assets =
 {
-	 Asset("ANIM", "anim/windarrow.zip"),
+	 Asset("ANIM", "anim/skadiarrow.zip"),
 }
 
 local function onthrown(inst, data)
-    inst:AddTag("NOCLICK")
     inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
 end
 
 local function fn()
 	local inst = CreateEntity()
 
-    inst.entity:AddTransform()
+   	inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddNetwork()
 
     MakeInventoryPhysics(inst)
     RemovePhysicsColliders(inst)
 
-    inst.AnimState:SetBank("windarrow")
-    inst.AnimState:SetBuild("windarrow")
+    inst.AnimState:SetBank("skadiarrow")
+    inst.AnimState:SetBuild("skadiarrow")
     inst.AnimState:PlayAnimation("idle")
 
    
@@ -30,6 +29,9 @@ local function fn()
     end
     inst.entity:SetPristine()
     
+    inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.atlasname = "images/inventoryimages/skadiarrow.xml"
+--    inst:AddComponent("stackable")
     inst:AddComponent("projectile")
     inst.components.projectile:SetSpeed(20)
     inst.components.projectile:SetOnHitFn(inst.Remove)
@@ -43,4 +45,4 @@ STRINGS.NAMES.WINDARROW                          = "Arrow"
 
  
 
-return Prefab( "common/inventory/windarrow", fn, assets) 
+return Prefab( "common/inventory/skadiarrow", fn, assets) 

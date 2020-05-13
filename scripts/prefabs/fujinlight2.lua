@@ -10,7 +10,7 @@ local function fn()
     inst.Light:SetIntensity(.75)
     inst.Light:SetColour(252 / 255, 251 / 255, 237 / 255)
     inst.Light:SetFalloff(1)
-    inst.Light:SetRadius(1)
+    inst.Light:SetRadius(3)
     inst.Light:Enable(true)
 
     inst.entity:SetPristine()
@@ -24,4 +24,4 @@ local function fn()
     return inst
 end
 
-return Prefab("fujinlight", fn)
+return Prefab("fujinlight2", fn)
